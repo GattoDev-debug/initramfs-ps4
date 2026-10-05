@@ -37,16 +37,12 @@ if test -r /key/eap_hdd_key.bin; then
             # Check if mount was successful
             if mountpoint -q /newroot; then
                 # Extract tar file to new root directory
-                if test -r /ps4hdd/system/boot/psxitarch.tar.xz; then
-                    ( cd /newroot; tar -xvJf /ps4hdd/system/boot/psxitarch.tar.xz; )
-                    echo "--INSTALL COMPLETE--"
-                    echo "If you are reading this message type: resume-boot a few times to boot into the distro"
-                elif test -r /ps4hdd/system/boot/psxitarch.tar.gz; then
-                    ( cd /newroot; tar -xvzf /ps4hdd/system/boot/psxitarch.tar.gz; )
+                if test -r /ps4hdd/system/boot/distro.tar.xz; then
+                    ( cd /newroot; tar -xvJf /ps4hdd/system/boot/distro.tar.xz; )
                     echo "--INSTALL COMPLETE--"
                     echo "If you are reading this message type: resume-boot a few times to boot into the distro"
                 else
-                    echo "/ps4hdd/system/boot/psxitarch.tar.xz or /ps4hdd/system/boot/psxitarch.tar.gz file does not exist or is not readable."
+                    echo "/ps4hdd/system/boot/distro.tar.xz file does not exist or is not readable."
                     exit 1
                 fi
             else
