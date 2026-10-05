@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -f /lib/firmware/edid/my_edid.bin ]; then
+	mkdir -p /newroot/lib/firmware/edid
+	cp -f /lib/firmware/edid/my_edid.bin /newroot/lib/firmware/edid/my_edid.bin
+fi
