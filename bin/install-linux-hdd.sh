@@ -41,6 +41,8 @@ if test -r /key/eap_hdd_key.bin; then
                     ( cd /newroot; tar -xvJf /ps4hdd/system/boot/distro.tar.xz; )
                     echo "--INSTALL COMPLETE--"
                     echo "If you are reading this message type: resume-boot a few times to boot into the distro"
+                    echo "If It fails, try running: fix-install.sh and resume-boot again."
+                    find-install.sh
                 else
                     echo "/ps4hdd/system/boot/distro.tar.xz file does not exist or is not readable."
                     exit 1

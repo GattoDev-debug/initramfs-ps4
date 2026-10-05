@@ -4,7 +4,7 @@
 # Copyright (c) 2010-2013, Piotr Karbowski <piotr.karbowski@gmail.com>
 # All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without 
+# Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #    * Redistributions of source code must retain the above copyright notice,
 #      this list of conditions and the following disclaimer.
@@ -31,5 +31,10 @@
 # Kill regular rescueshell (which is exected on error OR forced via 'rescueshell' boot option'
 # And remove /remote-rescueshell.lock what is executed when you login over ssh in the sshd_wait period
 
-if [ -f '/rescueshell.pid' ]; then kill -9 "$(cat /rescueshell.pid)"; fi
-if [ -f '/remote-rescueshell.lock' ]; then rm '/remote-rescueshell.lock'; fi
+if mountpoint -q /newroot; then
+    if [ -f '/rescueshell.pid' ]; then kill -9 "$(cat /rescueshell.pid)"; fi
+else
+    . /functions.sh
+    eerror "/newroot is not a mountpoint, please reboot."
+fi
+#if [ -f '/remote-rescueshell.lock' ]; then rm '/remote-rescueshell.lock'; fi

@@ -119,10 +119,7 @@ rm -R /newroot/lost+found
 einfo "Add eap key and edid.."
 cp /key/eap_hdd_key.bin /newroot/etc/cryptmount
 cp /lib/firmware/edid/my_edid.bin /newroot/lib/firmware/edid
-
-einfo "Booting psxitarch linux, please wait.."
-exec switch_root /newroot /newroot/sbin/init &
-sleep 2 &&
-exec switch_root /newroot /newroot/sbin/init &
-sleep 2 &&
-exec switch_root /newroot /newroot/sbin/init
+find-install.sh
+sleep 5
+einfo "Installed! run resume-boot a few times to boot."
+echo "If It fails, try running: fix-install.sh and resume-boot again."
