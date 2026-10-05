@@ -1,2 +1,5 @@
-initramfs.cpio.gz
-lib/firmware
+*.cpio.gz
+*.img
+*.log
+*.pid
+lib/firmware/*
