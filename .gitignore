@@ -2,4 +2,5 @@
 *.img
 *.log
 *.pid
-lib/firmware/*
+lib/firmware/amdgpu/*
+lib/firmware/mrvl/*
