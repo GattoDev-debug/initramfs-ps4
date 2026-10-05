@@ -4,27 +4,44 @@ set -eu
 
 SRC="$(cd "$(dirname "$0")" && pwd)"
 OUT="${SRC}/initramfs.cpio.gz"
-TMP="${SRC}/.initramfs.tmp.cpio"
+
+PRODUCTION=0
+for arg in "$@"; do
+    case "$arg" in
+        -production|--production)
+            PRODUCTION=1
+            ;;
+        *)
+            echo "Unknown argument: $arg" >&2
+            echo "Usage: $0 [-production]" >&2
+            exit 1
+            ;;
+    esac
+done
 
 cd "$SRC"
 
-# Remove any previous archives
-rm -f "$OUT" "$TMP"
+# Remove any previous archive
+rm -f "$OUT"
 
-# Build the archive, excluding only bake.sh and the output itself
-find . \
+# Build the exclusion list for find
+if [ "$PRODUCTION" -eq 1 ]; then
+    echo "Production mode: excluding .git/, .github/, bake.sh"
+    FIND_EXCLUDES="\( -name 'bake.sh' \
+        -o -name 'initramfs.cpio.gz' \
+        -o -name '.git' \
+        -o -name '.github' \
+        -o -name '.gitignore' \) -prune"
+else
+    FIND_EXCLUDES="\( -name 'bake.sh' \
+        -o -name 'initramfs.cpio.gz' \) -prune"
+fi
+
+eval "find . \
     -mindepth 1 \
-    \( -name 'bake.sh' \
-       -o -name 'initramfs.cpio.gz' \
-       -o -name '.initramfs.tmp.cpio' \) -prune \
-    -o -print0 \
-| cpio --null -o -H newc --quiet > "$TMP"
-
-cpio -it --quiet < "$TMP" \
-| grep -Ev '^\./(\.git|\.github)(/|$)' \
-| cpio -o -H newc --quiet \
+    $FIND_EXCLUDES \
+    -o -print0" \
+| cpio --null -o -H newc --quiet \
 | gzip -9 > "$OUT"
-
-rm -f "$TMP"
 
 echo "Wrote $OUT ($(du -h "$OUT" | cut -f1))"
