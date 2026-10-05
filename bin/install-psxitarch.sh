@@ -1,5 +1,5 @@
 #!/bin/sh
-
+. /functions.sh
 mkdir /temp
 mkdir /backup
 

@@ -1,0 +1,11 @@
+#!/bin/sh
+. /functions.sh
+DEV=$(awk '$2 == "/newroot" { print $1 }' /proc/mounts)
+
+if [ -z "$DEV" ]; then
+    eerror "Nothing is mounted on /newroot."
+    exit 1
+fi
+umount /newroot
+e2fsck -f -y "$DEV"
+mount "$DEV" /newroot
