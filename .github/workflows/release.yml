@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install cpio
+        run: sudo apt-get update && sudo apt-get install -y cpio
+
+      - name: Make bake.sh executable
+        run: chmod +x bake.sh
+
+      - name: Run bake.sh
+        run: ./bake.sh
+
+      - name: Verify archive
+        run: |
+          test -s initramfs.cpio.gz
+          ls -lh initramfs.cpio.gz
+          echo "--- archive contents (first 20 entries) ---"
+          zcat initramfs.cpio.gz | cpio -it --quiet | head -20
+          echo "--- total entries ---"
+          zcat initramfs.cpio.gz | cpio -it --quiet | wc -l
+
+      - name: Compute release tag
+        id: tag
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          TAG="build-${SHORT_SHA}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Releasing as $TAG"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Build ${{ steps.tag.outputs.tag }}"
+          body: |
+            Automated build from commit ${{ github.sha }}.
+
+            **Archive:** `initramfs.cpio.gz`
+            **Size:** see asset below
+          files: initramfs.cpio.gz
+          fail_on_unmatched_files: true
+          generate_release_notes: true
