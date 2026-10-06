@@ -87,6 +87,7 @@ use rootdelay rootdelay
 sleep 5
 find-install.sh
 emount /newroot
+run_hooks after_mount_newroot
 cleanup
 moveDev
 eumount /sys /proc

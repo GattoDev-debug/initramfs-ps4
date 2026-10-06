@@ -1,7 +1,7 @@
 #!/bin/sh
-
+. /functions.sh
 # Prompt user for seek value
-echo -n "Enter the amount of storage to dedicate to your linux install (GB's): "
+eask "Enter the amount of storage to dedicate to your linux install (GB's): "
 read seek_value
 
 # Check if key file exists and is readable
@@ -13,7 +13,7 @@ if test -r /key/eap_hdd_key.bin; then
 
         # Check if /ps4hdd directory exists
         if test -d /ps4hdd; then
-            echo "/ps4hdd directory already exists. Skipping mkdir command."
+            einfo "/ps4hdd directory already exists. Skipping mkdir command."
         else
             # Create directory
             mkdir /ps4hdd
@@ -39,25 +39,29 @@ if test -r /key/eap_hdd_key.bin; then
                 # Extract tar file to new root directory
                 if test -r /ps4hdd/system/boot/distro.tar.xz; then
                     ( cd /newroot; tar -xvJf /ps4hdd/system/boot/distro.tar.xz; )
-                    echo "--INSTALL COMPLETE--"
-                    echo "If you are reading this message type: resume-boot a few times to boot into the distro"
-                    echo "If It fails, try running: fix-install.sh and resume-boot again."
+                    einfo "--INSTALL COMPLETE--"
+                    einfo "If you are reading this message type: resume-boot a few times to boot into the distro"
+                    einfo "If It fails, try running: fix-install.sh and resume-boot again."
                     find-install.sh
                 else
-                    echo "/ps4hdd/system/boot/distro.tar.xz file does not exist or is not readable."
+                    eerror "Error: /ps4hdd/system/boot/distro.tar.xz file does not exist or is not readable."
                     exit 1
                 fi
             else
-                echo "Error: failed to mount /dev/loop5 on /newroot."
+                eerror "Error: failed to mount /dev/loop5 on /newroot."
                 exit 1
             fi
         else
-            echo "Error: failed to mount /dev/mapper/ps4hdd on /ps4hdd."
+            eerror "Error: failed to mount /dev/mapper/ps4hdd on /ps4hdd."
             exit 1
         fi
     else
-        echo "/dev/sda27 device does not exist or is not accessible."
+        eerror "Error: /dev/sda27 device does not exist or is not accessible."
         exit 1
     fi
-fi
+
+    else
+        eerror "Error: decryption key does not exist or is not accessible."
+        exit 1
+    fi
 resume-boot
