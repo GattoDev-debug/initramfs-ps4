@@ -27,6 +27,12 @@ rm -f "$OUT"
 chmod +x ./init
 chmod +x ./bin/* 2>/dev/null || true
 
+# Write current Git commit hash to VERSION
+GIT_HASH="$(git rev-parse --short=7 HEAD)"
+printf '%s\n' "$GIT_HASH" > GIT_HASH
+
+echo "Version: $GIT_HASH"
+
 # Build the exclusion list for find
 if [ "$PRODUCTION" -eq 1 ]; then
     echo "Production mode: excluding .git/, .github/, .gitignore"

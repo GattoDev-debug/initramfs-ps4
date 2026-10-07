@@ -54,8 +54,9 @@ readonly default_ifs="${IFS}"
 # Basic
 kernelver="$(uname -r)"
 ver="$(cat /VERSION)"
+hash="$(cat /GIT_HASH)"
 
-einfo "initramfs-ps4 ${ver}. Linux kernel ${kernelver}.\n"
+einfo "initramfs-ps4 ${ver}-git-${hash}. Linux kernel ${kernelver}.\n"
 echo -e "\nWelcome to initramfs-ps4 ${ver}. Linux kernel ${kernelver}.\n" > /etc/motd
 ewarn "This is experimental software."
 emount /proc /sys

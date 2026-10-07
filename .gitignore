@@ -4,3 +4,4 @@
 *.pid
 lib/firmware/amdgpu/*
 lib/firmware/mrvl/*
+GIT_HASH
