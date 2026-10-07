@@ -505,14 +505,13 @@ cleanup() {
 boot_newroot() {
 	init="${init:-/sbin/init}"
 	einfo "Switching root to /newroot and executing ${init}."
-	chmod +x "/newroot/${init}"
-	if ! [ -x "/newroot/${init}" ]; then die "There is no executable '/newroot/${init}'."; fi
+	if ! [ -e "/newroot/${init}" ]; then die "There is no executable '/newroot/${init}'."; fi
+	if ! [ -x "/newroot/${init}" ]; then die "This is not bootable, you probably extracted this wrong."; fi
 	exec env -i \
 		TERM="${TERM:-linux}" \
 		PATH="${PATH:-/bin:/sbin:/usr/bin:/usr/sbin}" \
 			switch_root /newroot "${init}"
 }
-
 emount() {
 	# All mounts into one place is good idea.
 	while [ "$#" -gt 0 ]; do
