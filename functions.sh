@@ -505,6 +505,7 @@ cleanup() {
 boot_newroot() {
 	init="${init:-/sbin/init}"
 	einfo "Switching root to /newroot and executing ${init}."
+	chmod +x "/newroot/${init}"
 	if ! [ -x "/newroot/${init}" ]; then die "There is no executable '/newroot/${init}'."; fi
 	exec env -i \
 		TERM="${TERM:-linux}" \
