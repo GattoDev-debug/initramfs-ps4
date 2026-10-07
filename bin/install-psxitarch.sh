@@ -28,10 +28,6 @@ sizeusb=$(einfo $sizeusb | awk -F',' '{print $1}')
 mu=$(einfo $mu | awk -F',' '{print $1}')
 
 einfo "Size usb device: $sizeusb $mu"
-if [ "$mu" != "GB" ] || [ $sizeusb -lt 12 ]; then
-	einfo "Not enough space on the usb device, please insert one usb with almost 12GB of free space and run again install-psxitarch.sh"
-	exit
-fi
 
 einfo "Copy psxitarch, the bzImage and the initramfs to /backup"
 cp /temp/distro.tar.xz /backup
