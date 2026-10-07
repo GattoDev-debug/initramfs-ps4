@@ -1,7 +1,8 @@
 #!/bin/sh
 
 . /functions.sh
-
+eerror "Error: This script is not functional, Please wait for an update."
+exit 1
 TEMP_DIR="/temp"
 
 NEWROOT="/newroot"
