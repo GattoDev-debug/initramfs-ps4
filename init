@@ -85,6 +85,10 @@ run_hooks pre_newroot_mount
 use rootdelay rootdelay
 
 sleep 5
+cryptsetup -d /key/eap_hdd_key.bin --cipher aes-xts-plain64 -s 256 --offset 0 --skip 111669149696 create ps4hdd /dev/sd?27
+mkdir -p /ps4hdd
+mount -t ufs -o ufstype=ufs2 /dev/mapper/ps4hdd /ps4hdd
+sleep 3
 find-install.sh
 emount /newroot
 run_hooks after_mount_newroot
