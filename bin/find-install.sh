@@ -1,5 +1,6 @@
 #!/bin/sh
 . /functions.sh
+umount /newroot 2>/dev/null;
 if mount LABEL=psxitarch /newroot 2>/dev/null; then
     einfo "Mounted external installation."
 else

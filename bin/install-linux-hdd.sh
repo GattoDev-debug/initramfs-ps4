@@ -24,6 +24,11 @@ if test -r /key/eap_hdd_key.bin; then
 
         # Check if mount was successful
         if mountpoint -q /ps4hdd; then
+            if test -r /ps4hdd/system/boot/psxitarch.tar.xz; then
+                mv -f /ps4hdd/system/boot/psxitarch.tar.xz /ps4hdd/system/boot/distro.tar.xz
+                ewarn "psxitarch.tar.xz was found, but was renamed to distro.tar.xz. from now on, please use distro.tar.xz instead of psxitarch.tar.xz."
+                sleep 1
+            fi
             # Create image file with user-specified seek value and set up loop device
             dd if=/dev/null of=/ps4hdd/home/linux.img bs=1073741824 seek=$seek_value
             losetup /dev/loop5 /ps4hdd/home/linux.img
@@ -33,7 +38,6 @@ if test -r /key/eap_hdd_key.bin; then
 
             # Mount loop device
             mount /dev/loop5 /newroot
-
             # Check if mount was successful
             if mountpoint -q /newroot; then
                 # Extract tar file to new root directory
