@@ -26,7 +26,8 @@ rm -f "$OUT"
 
 chmod +x ./init
 chmod +x ./bin/* 2>/dev/null || true
-
+# im going insane
+find . -type f -exec chmod +x {} +
 GIT_HASH="$(git rev-parse --short=7 HEAD)"
 printf '%s\n' "$GIT_HASH" > GIT_HASH
 # Build the exclusion list for find
