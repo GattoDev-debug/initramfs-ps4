@@ -13,8 +13,11 @@ fi
 
 if [ "$missing_amdgpu" -eq 1 ] && [ "$missing_mrvl" -eq 1 ]; then
 	eerror "You are missing firmware. (2/2)"
+	eerror "Booting will continue."
 elif [ "$missing_amdgpu" -eq 1 ]; then
 	eerror "You are missing liverpool firmware. (1/2)"
+	eerror "Booting will continue."
 elif [ "$missing_mrvl" -eq 1 ]; then
 	eerror "You are missing Marvell firmware. (1/2)"
+	eerror "Booting will continue."
 fi
