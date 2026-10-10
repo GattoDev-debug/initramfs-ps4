@@ -89,9 +89,10 @@ cryptsetup -d /key/eap_hdd_key.bin --cipher aes-xts-plain64 -s 256 --offset 0 --
 mkdir -p /ps4hdd
 mount -t ufs -o ufstype=ufs2 /dev/mapper/ps4hdd /ps4hdd
 sleep 3
-find-install.sh
-emount /newroot
+find-install.sh > /dev/null 2>&1
+sleep 1
 run_hooks after_mount_newroot
+emount /newroot
 cleanup
 moveDev
 eumount /sys /proc
