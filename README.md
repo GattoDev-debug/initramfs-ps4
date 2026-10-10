@@ -9,6 +9,6 @@
 6. edid fix
 
 # How to run:
-On a linux host, run `./bake.sh`, It will produce an `initramfs.cpio.gz` file.
+On a linux host, run `./bake.sh`, It will produce an `initramfs.cpio.gz` file. (vulkan will be broken this way, as local builds dont have firmware)
 
 ...Or download from releases https://github.com/GattoDev-debug/initramfs-ps4/releases/latest
