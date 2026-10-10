@@ -1,15 +1,13 @@
 #!/bin/sh
 . /functions.sh
-find-install.sh
-sleep 1
 DEV=$(mount | awk '$3 == "/newroot" { print $1; exit }')
 
 if [ -z "$DEV" ]; then
     eerror "Nothing is mounted on /newroot."
-else
-    umount /newroot
-    einfo "Checking storage for issues..."
-    e2fsck -f -y "$DEV"
-    einfo "Process finished."
-    mount "$DEV" /newroot
+    exit 1
 fi
+umount /newroot
+einfo "Checking storage for issues..."
+e2fsck -f -y "$DEV"
+einfo "Process finished."
+mount "$DEV" /newroot
