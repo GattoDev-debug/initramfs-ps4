@@ -3,14 +3,19 @@
 # Prompt user for seek value
 eask "Enter the amount of storage to dedicate to your linux install (GB's): "
 read seek_value
-
+eask "Pick your file system (1 - ext4, 2 - btrfs): "
+read fs
 # Check if key file exists and is readable
 if test -r /key/eap_hdd_key.bin; then
     # Check if physical device exists and is accessible
     if test -b /dev/sda27; then
         # Set up encrypted device
         cryptsetup -d /key/eap_hdd_key.bin --cipher=aes-xts-plain64 -s 256 --offset=0 --skip=111669149696 create ps4hdd /dev/sda27
-
+        if ! test -r /ps4hdd/system/boot/psxitarch.tar.xz &&
+           ! test -r /ps4hdd/system/boot/distro.tar.xz; then
+            eerror "Distro file was not found."
+            exit 1
+        fi
         # Check if /ps4hdd directory exists
         if test -d /ps4hdd; then
             einfo "/ps4hdd directory already exists. Skipping mkdir command."
@@ -34,8 +39,18 @@ if test -r /key/eap_hdd_key.bin; then
             losetup /dev/loop5 /ps4hdd/home/linux.img
 
             # Create ext4 filesystem on loop device
-            mkfs.ext4 /dev/loop5
-
+            case "$fs" in
+                1)
+                    mkfs.ext4 /dev/loop5
+                    ;;
+                2)
+                    mkfs.btrfs /dev/loop5
+                    ;;
+                *)
+                    eerror "I don't understand this file system choice."
+                    exit 1
+                    ;;
+            esac
             # Mount loop device
             mount /dev/loop5 /newroot
             # Check if mount was successful
